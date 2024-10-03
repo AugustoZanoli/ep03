@@ -1,3 +1,18 @@
+/*
+Nome: Ep03
+------------
+Programadores: Augusto de Camargos Zanoli e Caio Henrique Pessoa De Lima
+------------
+Matrícula: 2023001020 e 2022012333
+------------
+Objetivo: Um programa principal para criar vários fans e apenas um demonstrador e verifique 
+se o algoritmo funciona, poderá utilizar a função sleep() nas funções de assisteFilme(), 
+telefona() e exibeFilme(), assisteFilme() e exibeFilme() devem demorar o mesmo tempo.
+------------
+Data: 02/10/2024
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
