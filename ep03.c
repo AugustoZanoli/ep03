@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -17,16 +15,15 @@ void* fan(void* arg) {
     while (1) {
         sem_wait(&mutex);
         nFans++;
-        printf("Fã %d chegou ao stand. Total de fãs no stand: %d\n", id, nFans);
-        // Se um fã que já assistiu um filme chega no stand, ou seja, o mesmo iD, significa que ele ja tinha saíddo da outra sessão dele, e se funcionar tudo era pra ele ter ligado para a mãe dele também
+        printf("| %-5d | %-32s | %-26d |\n", id, "Chegou ao stand", nFans);
         sem_post(&mutex);
 
         sem_post(&dem);
         sem_wait(&fila);
 
-        printf("Fã %d | assistindo ao filme\n", id);
+        printf("| %-5d | %-32s | %-26s |\n", id, "Assistindo ao filme", "-");
         sleep(2);
-        printf("Fã %d | telefonando para a mãe\n", id);
+        printf("| %-5d | %-33s | %-26s |\n", id, "Telefonando para a mãe", "-");
         sleep(1);
     }
 }
@@ -39,14 +36,14 @@ void* demonstrator(void* arg) {
 
         sem_wait(&mutex);
         nFans -= N;
-        printf("Demonstrador | iniciando exibição para 10 fãs. Fãs restantes: %d\n", nFans);
+        printf("| %-5s | %-35s | %-26d |\n", "DEMO", "Iniciando exibição para 10 fãs", nFans);
         sem_post(&mutex);
 
         for (int i = 0; i < N; i++) {
             sem_post(&fila);  // Libera os fãs para assistirem ao filme
         }
 
-        printf("Demonstrador | exibindo o filme\n");
+        printf("| %-5s | %-32s | %-26s |\n", "DEMO", "Exibindo o filme", "-");
         sleep(2);
     }
 }
@@ -55,9 +52,14 @@ int main() {
     pthread_t demoThread;
     pthread_t fanThreads[20];  // Mais de 10 fãs
 
+    // Inicializar semáforos
     sem_init(&mutex, 0, 1);
     sem_init(&dem, 0, 0);
     sem_init(&fila, 0, 0);
+
+    // Cabeçalho da tabela
+    printf("| %-5s | %-34s | %-27s |\n", "ID", "Ação  ", "Total de Fãs no Stand");
+    printf("| %-5s|%-34s|%-26s|\n", "------", "----------------------------------", "----------------------------");
 
     // Thread do demonstrador
     pthread_create(&demoThread, NULL, demonstrator, NULL);
